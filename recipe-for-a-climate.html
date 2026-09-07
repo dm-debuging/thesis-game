@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recipe for a Climate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3EEE4;
+    --surface:#FDFAF3;
+    --surface-2:#EAE2CE;
+    --ink:#241F1B;
+    --ink-soft:#5B564C;
+    --ink-faint:#8C8574;
+    --line:#DBD1B8;
+    --bordeaux:#7A2035;
+    --bordeaux-ink:#FBF0EE;
+    --bordeaux-soft:#F1DCDE;
+    --olive:#54633F;
+    --olive-soft:#E1E6D3;
+    --mustard:#95661B;
+    --mustard-soft:#F1E2C4;
+    --zinc:#5E594C;
+    --zinc-soft:#E4E0D3;
+    --plum:#5C4E73;
+    --plum-soft:#E5DFEE;
+    --zone-inclusion: rgba(84,99,63,0.16);
+    --zone-assimilation: rgba(149,102,27,0.16);
+    --zone-differentiation: rgba(122,32,53,0.14);
+    --zone-exclusion: rgba(94,89,76,0.14);
+    --zone-uncommitted: rgba(92,78,115,0.30);
+    --shadow: 0 1px 2px rgba(36,31,27,0.06), 0 6px 20px -8px rgba(36,31,27,0.18);
+    --focus: #2B6E8C;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1815;
+      --surface:#242019;
+      --surface-2:#2E2A21;
+      --ink:#EFE8D9;
+      --ink-soft:#BEB4A0;
+      --ink-faint:#8C8371;
+      --line:#3D372B;
+      --bordeaux:#DE8195;
+      --bordeaux-ink:#2B1418;
+      --bordeaux-soft:#3A2027;
+      --olive:#9FB57C;
+      --olive-soft:#2A311F;
+      --mustard:#E4AE52;
+      --mustard-soft:#332715;
+      --zinc:#B7AE99;
+      --zinc-soft:#2C2921;
+      --plum:#B6A2D6;
+      --plum-soft:#2A2333;
+      --zone-inclusion: rgba(159,181,124,0.18);
+      --zone-assimilation: rgba(228,174,82,0.16);
+      --zone-differentiation: rgba(222,129,149,0.16);
+      --zone-exclusion: rgba(183,174,153,0.14);
+      --zone-uncommitted: rgba(182,162,214,0.28);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 26px -10px rgba(0,0,0,0.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1815;
+    --surface:#242019;
+    --surface-2:#2E2A21;
+    --ink:#EFE8D9;
+    --ink-soft:#BEB4A0;
+    --ink-faint:#8C8371;
+    --line:#3D372B;
+    --bordeaux:#DE8195;
+    --bordeaux-ink:#2B1418;
+    --bordeaux-soft:#3A2027;
+    --olive:#9FB57C;
+    --olive-soft:#2A311F;
+    --mustard:#E4AE52;
+    --mustard-soft:#332715;
+    --zinc:#B7AE99;
+    --zinc-soft:#2C2921;
+    --plum:#B6A2D6;
+    --plum-soft:#2A2333;
+    --zone-inclusion: rgba(159,181,124,0.18);
+    --zone-assimilation: rgba(228,174,82,0.16);
+    --zone-differentiation: rgba(222,129,149,0.16);
+    --zone-exclusion: rgba(183,174,153,0.14);
+    --zone-uncommitted: rgba(182,162,214,0.28);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 26px -10px rgba(0,0,0,0.55);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ background:var(--bg); }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Karla", ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:4rem;
+  }
+  h1,h2,h3{ font-family:"Fraunces", ui-serif, Georgia, serif; text-wrap:balance; margin:0; }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2.5px solid var(--focus); outline-offset:2px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter:blur(10px) saturate(1.1);
+    -webkit-backdrop-filter:blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:720px; margin:0 auto;
+    padding:.65rem 1rem;
+    display:flex; align-items:center; gap:.75rem;
+  }
+  .bowl-icon{ flex:none; width:34px; height:30px; transition:transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .bowl-icon.pulse{ transform:scale(1.22) rotate(-4deg); }
+  .bowl-count{ flex:1; min-width:0; }
+  .bowl-count .n{ font-size:1.05rem; font-weight:600; }
+  .bowl-count .label{ font-size:.72rem; color:var(--ink-soft); letter-spacing:.02em; }
+  .topbar.drop-hover{
+    background:var(--bordeaux-soft);
+    box-shadow:inset 0 0 0 2px var(--bordeaux);
+  }
+  .topbar.drop-hover .bowl-icon path,
+  .topbar.drop-hover .bowl-icon line{ stroke:var(--bordeaux); }
+
+  .ing-ghost{
+    position:fixed;
+    pointer-events:none;
+    z-index:999;
+    box-shadow:var(--shadow);
+    will-change:transform,opacity;
+    opacity:1;
+  }
+  .ing-ghost.flying{ transition:transform .38s cubic-bezier(.4,0,.2,1), opacity .38s ease .12s; }
+  .ing-ghost.snapping{ transition:transform .28s cubic-bezier(.34,1.2,.64,1); }
+
+  .bake-btn{
+    flex:none;
+    background:var(--bordeaux); color:var(--bordeaux-ink);
+    border:none; border-radius:999px;
+    padding:.7rem 1.25rem;
+    font-size:.92rem; font-weight:700; letter-spacing:.01em;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .bake-btn:active{ transform:scale(.96); }
+  .bake-btn:disabled{ opacity:.4; cursor:not-allowed; box-shadow:none; }
+
+  /* ---------- Header / intro ---------- */
+  .wrap{ max-width:720px; margin:0 auto; padding:0 1rem; }
+  .intro{ padding:1.6rem 0 .6rem; }
+  .intro .kicker{
+    display:block; font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--bordeaux); margin-bottom:.5rem; font-weight:600;
+  }
+  .intro h1{ font-size:1.9rem; font-weight:600; line-height:1.12; }
+  .intro p{ color:var(--ink-soft); font-size:.94rem; max-width:56ch; margin:.7rem 0 0; }
+
+  /* ---------- Sections ---------- */
+  .section{ margin-top:1.6rem; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.75rem; margin-bottom:.7rem; }
+  .section-head h2{ font-size:1.18rem; font-weight:600; }
+  .section-head .count{
+    font-family:"IBM Plex Mono", monospace; font-size:.72rem; color:var(--ink-faint);
+    flex:none;
+  }
+  .ingredient-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:.55rem;
+  }
+  @media (min-width:560px){
+    .ingredient-grid{ grid-template-columns:repeat(3, 1fr); }
+  }
+
+  .ing{
+    position:relative;
+    text-align:left;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:.7rem 2rem .7rem .75rem;
+    cursor:grab;
+    touch-action:none;
+    -webkit-user-select:none; user-select:none;
+    display:flex; flex-direction:column; gap:.3rem;
+    min-height:64px;
+    transition:background .15s ease, border-color .15s ease, transform .1s ease, opacity .15s ease;
+  }
+  .ing:active{ transform:scale(.98); }
+  .ing.ing-sourcing{ opacity:.35; }
+  .ing .name{ font-size:.86rem; font-weight:600; line-height:1.25; }
+  .ing .tag{ font-family:"IBM Plex Mono", monospace; font-size:.64rem; color:var(--ink-faint); letter-spacing:.01em; }
+  .ing .check{
+    position:absolute; top:.55rem; right:.55rem;
+    width:18px; height:18px; border-radius:50%;
+    border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:transparent;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .ing .check svg{ width:11px; height:11px; }
+  .ing[aria-pressed="true"]{
+    background:var(--bordeaux); border-color:var(--bordeaux);
+  }
+  .ing[aria-pressed="true"] .name{ color:var(--bordeaux-ink); }
+  .ing[aria-pressed="true"] .tag{ color:color-mix(in srgb, var(--bordeaux-ink) 75%, transparent); }
+  .ing[aria-pressed="true"] .check{
+    background:var(--bordeaux-ink); border-color:var(--bordeaux-ink); color:var(--bordeaux);
+  }
+
+  /* ---------- Results ---------- */
+  #results{
+    margin-top:2.2rem;
+    padding-top:1.6rem;
+    border-top:1px solid var(--line);
+  }
+  #results[hidden]{ display:none; }
+  #results{ animation:riseIn .5s ease both; }
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .result-name{ font-size:1.85rem; font-weight:700; line-height:1.12; }
+  .result-term{
+    margin-top:.5rem; font-size:.76rem; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .result-gloss{ color:var(--ink-soft); font-size:1rem; margin-top:.6rem; max-width:52ch; }
+
+  .cake-wrap{ display:flex; justify-content:center; margin:1.4rem 0 .3rem; }
+  .cake-illus{ width:210px; max-width:78%; height:auto; }
+  .cake-illus[hidden]{ display:none; }
+
+  .plot-wrap{ margin:1.5rem 0 .5rem; }
+  .plot-readout{
+    display:flex; gap:1.4rem; margin-top:.6rem;
+    font-size:.78rem; color:var(--ink-soft);
+  }
+  .plot-readout b{ color:var(--ink); font-weight:600; }
+
+  .legend{
+    display:grid; gap:.5rem; margin-top:1.3rem;
+  }
+  .legend-item{
+    display:flex; align-items:flex-start; gap:.6rem;
+    padding:.55rem .65rem; border-radius:10px;
+    border:1px solid transparent;
+  }
+  .legend-item .swatch{
+    flex:none; width:14px; height:14px; border-radius:50%; margin-top:.2rem;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.12);
+  }
+  .legend-item .txt b{ font-size:.88rem; }
+  .legend-item .txt span{ display:block; font-size:.78rem; color:var(--ink-soft); margin-top:.1rem; }
+  .legend-item.active{
+    border-color:var(--line); background:var(--surface);
+  }
+
+  .tip-block{ margin-top:1.6rem; display:grid; gap:.9rem; }
+  .tip-group h3{
+    font-family:"Karla"; font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:.4rem;
+  }
+  .tip-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .tip-list li{
+    font-size:.8rem; background:var(--surface-2); border-radius:8px; padding:.35rem .55rem;
+    border:1px solid var(--line);
+  }
+  .tip-empty{ font-size:.82rem; color:var(--ink-faint); font-style:italic; }
+
+  .note{
+    margin-top:1.8rem; font-size:.8rem; color:var(--ink-faint);
+    border-left:2px solid var(--line); padding-left:.75rem;
+  }
+
+  .reset-row{ margin-top:1.8rem; }
+  .reset-btn{
+    background:none; border:1px solid var(--line); color:var(--ink);
+    border-radius:999px; padding:.6rem 1.1rem; font-size:.84rem; font-weight:600; cursor:pointer;
+  }
+  .reset-btn:active{ transform:scale(.97); }
+
+  footer{
+    max-width:720px; margin:2.4rem auto 0; padding:1rem 1rem 0;
+    font-size:.72rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <svg class="bowl-icon" viewBox="0 0 40 34" aria-hidden="true">
+      <defs>
+        <clipPath id="bowlClip">
+          <path d="M4 12 C4 12 4 30 20 30 C36 30 36 12 36 12 Z"/>
+        </clipPath>
+      </defs>
+      <path d="M4 12 C4 12 4 30 20 30 C36 30 36 12 36 12 Z" fill="none" stroke="var(--ink-faint)" stroke-width="1.6"/>
+      <rect id="fillRect" x="2" y="30" width="36" height="0" fill="var(--bordeaux)" clip-path="url(#bowlClip)"/>
+      <line x1="1" y1="12" x2="39" y2="12" stroke="var(--ink-faint)" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <div class="bowl-count">
+      <div class="n"><span id="bowlN">0</span> of 34 in the bowl</div>
+      <div class="label" id="bowlHint">drag ingredients up here</div>
+    </div>
+    <button class="bake-btn" id="bakeBtn" disabled>Bake it</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="intro">
+    <span class="kicker">Every ingredient below is real</span>
+    <h1>Recipe for a Climate</h1>
+    <p>These are real HR practices, reported by real foreign employees and HR staff at French multinationals, for this thesis. Drag the ones you'd put in the bowl for a locally-hired foreign employee up to the bowl above (or just tap them), then hit <strong>Bake it</strong> to see which inclusion climate your mix makes.</p>
+  </div>
+
+  <div id="sections"></div>
+
+  <section id="results" hidden aria-live="polite">
+    <h2 class="result-name" id="resultName">—</h2>
+    <p class="result-term mono" id="resultTerm">—</p>
+    <p class="result-gloss" id="resultGloss">—</p>
+
+    <div class="cake-wrap">
+      <svg class="cake-illus" data-cake="inclusion" hidden viewBox="0 0 220 170" role="img" aria-label="A neatly iced two-tier cake with sprinkles and a lit candle">
+        <ellipse cx="110" cy="150" rx="82" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="42" y="100" width="136" height="42" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="40" y="88" width="140" height="18" rx="9" fill="var(--olive)"/>
+        <circle cx="55" cy="104" r="5" fill="var(--olive)"/><circle cx="75" cy="104" r="5" fill="var(--olive)"/><circle cx="95" cy="104" r="5" fill="var(--olive)"/><circle cx="115" cy="104" r="5" fill="var(--olive)"/><circle cx="135" cy="104" r="5" fill="var(--olive)"/><circle cx="155" cy="104" r="5" fill="var(--olive)"/>
+        <rect x="70" y="54" width="80" height="40" rx="7" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="68" y="42" width="84" height="16" rx="8" fill="var(--olive)"/>
+        <circle cx="78" cy="56" r="4" fill="var(--olive)"/><circle cx="94" cy="56" r="4" fill="var(--olive)"/><circle cx="110" cy="56" r="4" fill="var(--olive)"/><circle cx="126" cy="56" r="4" fill="var(--olive)"/><circle cx="142" cy="56" r="4" fill="var(--olive)"/>
+        <rect x="107" y="20" width="6" height="22" rx="2" fill="var(--mustard)"/>
+        <path d="M110 12 Q114 18 110 23 Q106 18 110 12 Z" fill="var(--bordeaux)"/>
+        <circle cx="60" cy="120" r="2.6" fill="var(--mustard)"/><circle cx="82" cy="128" r="2.6" fill="var(--bordeaux)"/><circle cx="102" cy="118" r="2.6" fill="var(--plum)"/><circle cx="128" cy="126" r="2.6" fill="var(--mustard)"/><circle cx="150" cy="118" r="2.6" fill="var(--bordeaux)"/><circle cx="164" cy="130" r="2.6" fill="var(--plum)"/>
+        <circle cx="88" cy="76" r="2.4" fill="var(--mustard)"/><circle cx="112" cy="80" r="2.4" fill="var(--plum)"/><circle cx="132" cy="74" r="2.4" fill="var(--bordeaux)"/>
+      </svg>
+      <svg class="cake-illus" data-cake="assimilation" hidden viewBox="0 0 220 170" role="img" aria-label="A single plain cake, uniformly frosted with no decoration">
+        <ellipse cx="110" cy="150" rx="82" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="40" y="80" width="140" height="62" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="38" y="68" width="144" height="18" rx="9" fill="var(--mustard)"/>
+        <circle cx="52" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="70" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="88" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="106" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="124" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="142" cy="84" r="4.5" fill="var(--mustard)"/><circle cx="160" cy="84" r="4.5" fill="var(--mustard)"/>
+        <circle cx="52" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="68" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="84" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="100" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="116" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="132" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="148" cy="132" r="2" fill="var(--mustard-soft)"/><circle cx="164" cy="132" r="2" fill="var(--mustard-soft)"/>
+      </svg>
+      <svg class="cake-illus" data-cake="differentiation" hidden viewBox="0 0 220 170" role="img" aria-label="A plain cake with one brightly decorated slice cut apart and set to the side">
+        <ellipse cx="112" cy="150" rx="88" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="24" y="88" width="112" height="54" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="22" y="78" width="116" height="14" rx="7" fill="var(--zinc-soft)" stroke="var(--line)" stroke-width="1"/>
+        <path d="M168 140 L168 98 L204 140 Z" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+        <line x1="168" y1="114" x2="188" y2="126" stroke="var(--line)" stroke-width="1.6"/>
+        <line x1="168" y1="127" x2="196" y2="133" stroke="var(--line)" stroke-width="1.6"/>
+        <rect x="163" y="88" width="14" height="11" rx="2.5" fill="var(--bordeaux)"/>
+        <circle cx="170" cy="85" r="4" fill="var(--bordeaux)"/>
+        <circle cx="184" cy="112" r="2.4" fill="var(--mustard)"/><circle cx="192" cy="122" r="2.4" fill="var(--plum)"/>
+      </svg>
+      <svg class="cake-illus" data-cake="exclusion" hidden viewBox="0 0 220 170" role="img" aria-label="A lopsided, cracked cake, tilted with a crumbling piece fallen off">
+        <ellipse cx="108" cy="150" rx="82" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+        <g transform="rotate(-6 108 118)">
+          <rect x="45" y="92" width="128" height="48" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="M50 92 Q68 83 92 92 L92 99 Q68 91 50 99 Z" fill="var(--zinc)"/>
+          <path d="M108 90 L113 102 L104 111 L115 122 L105 133 L112 140" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <path d="M150 138 L168 133 L172 145 L152 149 Z" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      </svg>
+      <svg class="cake-illus" data-cake="uncommitted" hidden viewBox="0 0 220 170" role="img" aria-label="A flat cake that never rose, sunken in the middle">
+        <ellipse cx="110" cy="150" rx="82" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+        <path d="M40 118 Q75 104 110 122 Q145 104 180 118 L180 140 Q180 146 173 146 L47 146 Q40 146 40 140 Z" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M50 116 Q80 106 110 120 Q140 106 170 116" fill="none" stroke="var(--plum)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M90 95 Q94 86 90 79 Q86 72 90 63" stroke="var(--ink-faint)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <path d="M130 95 Q134 86 130 79 Q126 72 130 63" stroke="var(--ink-faint)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="plot-wrap">
+      <svg id="plotSvg" viewBox="0 0 300 300" role="img" aria-labelledby="plotTitle" style="width:100%; height:auto; max-width:340px; display:block;">
+        <title id="plotTitle">Quadrant plot of belongingness against value in uniqueness</title>
+      </svg>
+      <div class="plot-readout">
+        <span>belongingness&nbsp; <b class="mono" id="readB">0.00</b></span>
+        <span>uniqueness valued&nbsp; <b class="mono" id="readU">0.00</b></span>
+      </div>
+    </div>
+
+    <div class="legend" id="legend"></div>
+
+    <div class="tip-block">
+      <div class="tip-group">
+        <h3>Pulled belonging up</h3>
+        <ul class="tip-list" id="tipBup"></ul>
+      </div>
+      <div class="tip-group">
+        <h3>Pulled belonging down</h3>
+        <ul class="tip-list" id="tipBdown"></ul>
+      </div>
+      <div class="tip-group">
+        <h3>Pulled uniqueness valued up</h3>
+        <ul class="tip-list" id="tipUup"></ul>
+      </div>
+      <div class="tip-group">
+        <h3>Pulled uniqueness valued down</h3>
+        <ul class="tip-list" id="tipUdown"></ul>
+      </div>
+    </div>
+
+    <p class="note">Every ingredient has two hidden scores: how much it builds belonging, and how much it values what makes someone different. Your cake is the <em>average</em> of everything in the bowl, not the total — a climate is about the whole mix, not how many ingredients you piled in. This page names what came out of the oven. It's not grading you as a baker.</p>
+
+    <div class="reset-row">
+      <button class="reset-btn" id="resetBtn">Bake another cake</button>
+    </div>
+  </section>
+</div>
+
+<footer>Every ingredient above is drawn from fifteen interviews conducted for this research: ten locally hired foreign employees and five HR professionals at French multinationals. Framework: Shore, L. M., Randel, A. E., Chung, B. G., Dean, M. A., Ehrhart, K. H., &amp; Singh, G. (2011). Inclusion and diversity in work groups: A review and model for future research. <em>Journal of Management, 37</em>(4), 1262&ndash;1289.</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // b = belongingness weight, u = value-in-uniqueness weight. Both -3..+3. Hidden from the player.
+  // Every ingredient is drawn from the thesis interviews (EMP01-10, HR1-5). "cite" names the source.
+  var DATA = [
+    { section:"Onboarding", items:[
+      {n:"No onboarding — you just figure it out", cite:"EMP02, EMP10", b:-2, u:-1},
+      {n:"Onboarding runs once a year, in French only", cite:"HR1", b:-2, u:-1},
+      {n:"You arrive to an empty office in August, everyone's on holiday", cite:"EMP01, EMP06", b:-2, u:0},
+      {n:"Weeks of onboarding: e-learning, and your manager introduces you around", cite:"EMP09", b:2, u:1},
+      {n:"Relocation help exists — but only for internal transfers, not you", cite:"EMP02", b:-2, u:-1},
+      {n:"A buddy who knows the company and speaks your language", cite:"EMP08", b:2, u:1},
+      {n:"Your buddy is just as new and lost as you are", cite:"EMP01", b:-1, u:-1},
+      {n:"French classes for permanent staff only — you pay your own tutor", cite:"EMP03", b:-1, u:-1},
+      {n:"HR tells you that you'll “never really be French”", cite:"EMP02", b:-3, u:-2}
+    ]},
+    { section:"Everyday interactions", items:[
+      {n:"The team speaks French, switches to English for a sentence, then drifts back", cite:"EMP03, EMP07", b:-1, u:1},
+      {n:"Company rule: switch to English if someone in the room needs it", cite:"HR3", b:2, u:2},
+      {n:"You're made to present in French, right after being denied lessons", cite:"EMP02", b:-2, u:-2},
+      {n:"A colleague translates for you, off her own back, not company policy", cite:"EMP02", b:1, u:1},
+      {n:"Colleagues laugh and talk around you in French. You understand nothing", cite:"EMP07", b:-3, u:0},
+      {n:"Someone just says “bonjour” and looks you in the eye", cite:"EMP08", b:2, u:0},
+      {n:"Open debate is just how the team talks, and someone tells you that upfront", cite:"EMP09", b:1, u:2},
+      {n:"Same debate culture, but nobody explains it — every disagreement feels risky", cite:"EMP02", b:-2, u:1},
+      {n:"Skipping the daily team lunch gets written into your review", cite:"EMP10", b:-2, u:-2}
+    ]},
+    { section:"Performance management", items:[
+      {n:"Same evaluation rubric for absolutely everyone, no exceptions", cite:"HR1", b:-1, u:-2},
+      {n:"Your manager asks how you're adjusting to a new language and life, as part of the review", cite:"EMP09", b:2, u:1},
+      {n:"“I know you're not French, so I wouldn't consider that you'd think this way”", cite:"EMP10", b:-2, u:-2},
+      {n:"Cut off from the French banter, so you're read as “not strong enough” — your emails now get checked before you send them", cite:"EMP07", b:-2, u:-2},
+      {n:"Denied the system access your role needs, then blamed for the missed work", cite:"EMP08", b:-2, u:-1},
+      {n:"Clients give you more flexibility than your own internal review does", cite:"HR2", b:1, u:1},
+      {n:"Your manager expects you to adapt “as quick as a French” employee", cite:"HR3", b:-1, u:-2},
+      {n:"Your background never comes up in the review — and that feels like fairness to you", cite:"EMP01", b:1, u:-1}
+    ]},
+    { section:"What the employee brings", items:[
+      {n:"You keep your accent on purpose — you want people to know you're different", cite:"EMP05", b:-1, u:2},
+      {n:"You learn to mask your background to move up", cite:"EMP06", b:2, u:-2},
+      {n:"You switch personality depending on the room — learn it, unlearn it, repeat", cite:"EMP01", b:1, u:-1},
+      {n:"You treat fitting in as your own homework, nobody else's job", cite:"EMP03", b:1, u:-1},
+      {n:"You say the imbalance out loud instead of absorbing it quietly", cite:"EMP06", b:-1, u:1},
+      {n:"You end up teaching your own buddy things about the company", cite:"EMP08", b:-1, u:1},
+      {n:"You smile less and speak less, to be taken more seriously", cite:"EMP04", b:1, u:-2},
+      {n:"You stay quiet about problems — nobody asks, and speaking up feels risky", cite:"across interviews", b:-1, u:-1}
+    ]}
+  ];
+
+  var OUTCOMES = {
+    inclusion:{ term:"Inclusion", attribution:"Shore et al. (2011) call this Inclusion.", headline:"Congrats — you’ve baked an Inclusion cake!", gloss:"Their term for high belonging and high uniqueness valued, together. In the interviews, this combination was rare — and even then, it usually held together because of one supportive manager, not a company policy.", color:"var(--olive)", soft:"var(--olive-soft)", zone:"var(--zone-inclusion)" },
+    assimilation:{ term:"Assimilation", attribution:"Shore et al. (2011) call this Assimilation.", headline:"You’ve baked an Assimilation cake.", gloss:"High belonging, low uniqueness valued: you're in, as long as you set your differences aside. This was the most common outcome across the interviews for this thesis.", color:"var(--mustard)", soft:"var(--mustard-soft)", zone:"var(--zone-assimilation)" },
+    differentiation:{ term:"Differentiation", attribution:"Shore et al. (2011) call this Differentiation.", headline:"You’ve baked a Differentiation cake.", gloss:"High uniqueness valued, low belonging: your difference gets noticed and even named out loud, but you're still not quite one of the team.", color:"var(--bordeaux)", soft:"var(--bordeaux-soft)", zone:"var(--zone-differentiation)" },
+    exclusion:{ term:"Exclusion", attribution:"Shore et al. (2011) call this Exclusion.", headline:"Oh no — you’ve baked an Exclusion cake.", gloss:"Low on both. Neither your fit with the team nor what makes you different is being recognised.", color:"var(--zinc)", soft:"var(--zinc-soft)", zone:"var(--zone-exclusion)" },
+    uncommitted:{ term:"Uncommitted mix", attribution:"Not one of Shore et al.'s four — this page's own fifth outcome.", headline:"This one didn’t rise — an Uncommitted mix.", gloss:"The ingredients pulled in different enough directions that no clear climate came out. That's a real result too, not a mistake.", color:"var(--plum)", soft:"var(--plum-soft)", zone:"var(--zone-uncommitted)" }
+  };
+
+  var THRESH = 0.4;
+  var selected = new Set(); // holds item.n as unique key (names are unique)
+  var allItems = [];
+  DATA.forEach(function(sec){ sec.items.forEach(function(it){ allItems.push(it); }); });
+
+  var sectionsEl = document.getElementById("sections");
+  var bowlN = document.getElementById("bowlN");
+  var bowlHint = document.getElementById("bowlHint");
+  var bakeBtn = document.getElementById("bakeBtn");
+  var results = document.getElementById("results");
+  var fillRect = document.getElementById("fillRect");
+  var topbarEl = document.querySelector(".topbar");
+  var bowlIconEl = document.querySelector(".bowl-icon");
+
+  function buildSections(){
+    DATA.forEach(function(sec){
+      var wrap = document.createElement("div");
+      wrap.className = "section";
+
+      var head = document.createElement("div");
+      head.className = "section-head";
+      head.innerHTML = '<h2>' + sec.section + '</h2><span class="count mono">' + sec.items.length + ' ingredients</span>';
+      wrap.appendChild(head);
+
+      var grid = document.createElement("div");
+      grid.className = "ingredient-grid";
+
+      sec.items.forEach(function(it){
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ing";
+        btn.setAttribute("aria-pressed", "false");
+        btn.innerHTML = '<span class="check" aria-hidden="true">' +
+            '<svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
+          '<span class="name">' + it.n + '</span><span class="tag">— ' + it.cite + '</span>';
+        btn.addEventListener("pointerdown", function(e){ onDragStart(e, it, btn); });
+        btn.addEventListener("click", function(){ onCardClick(it, btn); });
+        grid.appendChild(btn);
+      });
+
+      wrap.appendChild(grid);
+      sectionsEl.appendChild(wrap);
+    });
+  }
+
+  // A quick tap (pointerdown+up with barely any movement) also counts as "add" —
+  // dragging is the primary gesture, tapping is the accessible fallback that plays the same flight.
+  var dragState = null;
+
+  function onDragStart(e, it, btn){
+    if(btn.getAttribute("aria-pressed") === "true") return; // already in the bowl; click removes it
+    if(e.button !== undefined && e.button > 0) return; // primary button / primary touch only
+
+    var rect = btn.getBoundingClientRect();
+    var ghost = btn.cloneNode(true);
+    ghost.classList.add("ing-ghost");
+    ghost.style.left = rect.left + "px";
+    ghost.style.top = rect.top + "px";
+    ghost.style.width = rect.width + "px";
+    ghost.style.height = rect.height + "px";
+    document.body.appendChild(ghost);
+
+    dragState = { it:it, btn:btn, ghost:ghost, startX:e.clientX, startY:e.clientY, moved:false };
+    btn.classList.add("ing-sourcing");
+
+    document.addEventListener("pointermove", onDragMove);
+    document.addEventListener("pointerup", onDragEnd, { once:true });
+  }
+
+  function onDragMove(e){
+    if(!dragState) return;
+    var dx = e.clientX - dragState.startX;
+    var dy = e.clientY - dragState.startY;
+    if(Math.abs(dx) > 6 || Math.abs(dy) > 6) dragState.moved = true;
+    var tilt = Math.max(-8, Math.min(8, dx / 10));
+    dragState.ghost.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.05) rotate(" + tilt + "deg)";
+    topbarEl.classList.toggle("drop-hover", isOverBowl(e.clientX, e.clientY));
+  }
+
+  function isOverBowl(x, y){
+    var r = topbarEl.getBoundingClientRect();
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }
+
+  function onDragEnd(e){
+    document.removeEventListener("pointermove", onDragMove);
+    if(!dragState) return;
+    var it = dragState.it, btn = dragState.btn, ghost = dragState.ghost, moved = dragState.moved;
+    topbarEl.classList.remove("drop-hover");
+    btn.classList.remove("ing-sourcing");
+    var dropped = isOverBowl(e.clientX, e.clientY);
+    dragState = null;
+
+    if(dropped || !moved){
+      flyToBowl(ghost, function(){
+        btn.dataset.suppressClick = "1";
+        addToBowl(it, btn);
+      });
+    } else {
+      snapBack(ghost);
+    }
+  }
+
+  function flyToBowl(ghost, onDone){
+    var bowlRect = bowlIconEl.getBoundingClientRect();
+    var ghostRect = ghost.getBoundingClientRect();
+    var tx = bowlRect.left + bowlRect.width/2 - (ghostRect.left + ghostRect.width/2);
+    var ty = bowlRect.top + bowlRect.height/2 - (ghostRect.top + ghostRect.height/2);
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var done = false;
+    function finish(){ if(done) return; done = true; if(ghost.parentNode) ghost.remove(); onDone(); }
+    if(reduced){ finish(); return; }
+    ghost.classList.add("flying");
+    requestAnimationFrame(function(){
+      ghost.style.transform = "translate(" + tx + "px," + ty + "px) scale(0.15)";
+      ghost.style.opacity = "0";
+    });
+    ghost.addEventListener("transitionend", finish, { once:true });
+    setTimeout(finish, 500);
+  }
+
+  function snapBack(ghost){
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduced){ ghost.remove(); return; }
+    var done = false;
+    function finish(){ if(done) return; done = true; if(ghost.parentNode) ghost.remove(); }
+    ghost.classList.add("snapping");
+    requestAnimationFrame(function(){ ghost.style.transform = "translate(0,0) scale(1)"; });
+    ghost.addEventListener("transitionend", finish, { once:true });
+    setTimeout(finish, 400);
+  }
+
+  function onCardClick(it, btn){
+    if(btn.dataset.suppressClick){ delete btn.dataset.suppressClick; return; }
+    var pressed = btn.getAttribute("aria-pressed") === "true";
+    if(pressed){ removeFromBowl(it, btn); } else { addToBowl(it, btn); }
+  }
+
+  function addToBowl(it, btn){
+    selected.add(it);
+    btn.setAttribute("aria-pressed", "true");
+    pulseBowl();
+    updateBowl();
+  }
+
+  function removeFromBowl(it, btn){
+    selected.delete(it);
+    btn.setAttribute("aria-pressed", "false");
+    updateBowl();
+  }
+
+  function pulseBowl(){
+    bowlIconEl.classList.add("pulse");
+    setTimeout(function(){ bowlIconEl.classList.remove("pulse"); }, 220);
+  }
+
+  function updateBowl(){
+    var n = selected.size;
+    bowlN.textContent = n;
+    bakeBtn.disabled = n === 0;
+    bowlHint.textContent = n === 0 ? "drag ingredients up here" : (n === 1 ? "ready whenever you are" : "drag more in, or hit Bake it");
+    var pct = Math.min(1, n / 34);
+    fillRect.setAttribute("y", 30 - pct * 18);
+    fillRect.setAttribute("height", pct * 18);
+    if(!results.hidden && n === 0){ results.hidden = true; }
+  }
+
+  function mean(arr, key){
+    if(arr.length === 0) return 0;
+    var s = 0;
+    arr.forEach(function(it){ s += it[key]; });
+    return s / arr.length;
+  }
+
+  function classify(bMean, uMean){
+    if(Math.abs(bMean) <= THRESH && Math.abs(uMean) <= THRESH) return "uncommitted";
+    var posB = bMean >= 0, posU = uMean >= 0;
+    if(posB && posU) return "inclusion";
+    if(posB && !posU) return "assimilation";
+    if(!posB && posU) return "differentiation";
+    return "exclusion";
+  }
+
+  function fmt(n){ return (n >= 0 ? "+" : "") + n.toFixed(2); }
+
+  function topN(items, key, dir, n){
+    // dir = 1 wants highest values, -1 wants lowest values; only strictly nonzero-in-that-direction entries
+    var filtered = items.filter(function(it){ return dir === 1 ? it[key] > 0 : it[key] < 0; });
+    filtered.sort(function(a, c){ return dir === 1 ? c[key] - a[key] : a[key] - c[key]; });
+    return filtered.slice(0, n);
+  }
+
+  function fillList(elId, list){
+    var el = document.getElementById(elId);
+    el.innerHTML = "";
+    if(list.length === 0){
+      var li = document.createElement("li");
+      li.className = "tip-empty";
+      li.textContent = "nothing in the bowl pulled this way";
+      li.style.background = "none"; li.style.border = "none"; li.style.padding = "0";
+      el.appendChild(li);
+      return;
+    }
+    list.forEach(function(it){
+      var li = document.createElement("li");
+      li.textContent = it.n;
+      el.appendChild(li);
+    });
+  }
+
+  function buildLegend(activeKey){
+    var order = ["inclusion", "assimilation", "differentiation", "exclusion", "uncommitted"];
+    var legend = document.getElementById("legend");
+    legend.innerHTML = "";
+    order.forEach(function(key){
+      var o = OUTCOMES[key];
+      var row = document.createElement("div");
+      row.className = "legend-item" + (key === activeKey ? " active" : "");
+      row.innerHTML = '<span class="swatch" style="background:' + o.color + '"></span>' +
+        '<span class="txt"><b>' + o.term + '</b><span>' + o.gloss + '</span></span>';
+      legend.appendChild(row);
+    });
+  }
+
+  function drawPlot(bMean, uMean, activeKey){
+    var svg = document.getElementById("plotSvg");
+    var S = 300, mid = S/2, pad = 26;
+    var half = mid - pad; // usable half-extent each direction
+    var scale = 3; // domain -3..3
+
+    function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+    // Coordinate mapping: x = uniqueness (right = positive), y = belonging (up = positive, so invert SVG y)
+    function X(u){ return mid + (u/scale)*half; }
+    function Y(b){ return mid - (b/scale)*half; }
+
+    function rect(x1,y1,x2,y2,key){
+      return '<rect x="'+x1+'" y="'+y1+'" width="'+(x2-x1)+'" height="'+(y2-y1)+'" fill="'+ css("--zone-"+key) +'"></rect>';
+    }
+
+    // top half = belonging positive; right half = uniqueness positive.
+    // top-right(u>0,b>0)=inclusion; top-left(u<0,b>0)=assimilation; bottom-right(u>0,b<0)=differentiation; bottom-left(u<0,b<0)=exclusion
+    var g = [];
+    g.push(rect(mid, pad, S-pad, mid, "inclusion"));
+    g.push(rect(pad, pad, mid, mid, "assimilation"));
+    g.push(rect(mid, mid, S-pad, S-pad, "differentiation"));
+    g.push(rect(pad, mid, mid, S-pad, "exclusion"));
+
+    // uncommitted core square
+    var coreHalf = (THRESH/scale) * half;
+    g.push('<rect x="'+(mid-coreHalf)+'" y="'+(mid-coreHalf)+'" width="'+(coreHalf*2)+'" height="'+(coreHalf*2)+'" rx="6" fill="'+css("--zone-uncommitted")+'"></rect>');
+
+    // axes
+    g.push('<line x1="'+pad+'" y1="'+mid+'" x2="'+(S-pad)+'" y2="'+mid+'" stroke="'+css("--line")+'" stroke-width="1.4"/>');
+    g.push('<line x1="'+mid+'" y1="'+pad+'" x2="'+mid+'" y2="'+(S-pad)+'" stroke="'+css("--line")+'" stroke-width="1.4"/>');
+
+    // border
+    g.push('<rect x="'+pad+'" y="'+pad+'" width="'+(S-2*pad)+'" height="'+(S-2*pad)+'" fill="none" stroke="'+css("--line")+'" stroke-width="1.4"/>');
+
+    // axis labels
+    g.push(text(mid, 13, "value in uniqueness →", "middle", css("--ink-faint")));
+    g.push(text(mid, S-6, "← suppressed      valued →", "middle", css("--ink-faint")));
+    g.push('<text x="10" y="'+mid+'" transform="rotate(-90 10 '+mid+')" text-anchor="middle" font-size="8.5" fill="'+css("--ink-faint")+'" font-family="IBM Plex Mono, monospace">belongingness</text>');
+
+    function text(x,y,str,anchor,fill,size){
+      return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anchor||"middle")+'" font-size="'+(size||8.5)+'" fill="'+fill+'" font-family="IBM Plex Mono, monospace">'+str+'</text>';
+    }
+
+    // dot
+    var px = X(Math.max(-scale, Math.min(scale, uMean)));
+    var py = Y(Math.max(-scale, Math.min(scale, bMean)));
+    var dotColor = css(colorVarFor(activeKey));
+    g.push('<circle cx="'+px+'" cy="'+py+'" r="9" fill="'+dotColor+'" stroke="'+css("--surface")+'" stroke-width="3"/>');
+
+    svg.innerHTML = g.join("");
+  }
+
+  function colorVarFor(key){
+    return { inclusion:"--olive", assimilation:"--mustard", differentiation:"--bordeaux", exclusion:"--zinc", uncommitted:"--plum" }[key];
+  }
+
+  function bake(){
+    var items = Array.from(selected);
+    var bMean = mean(items, "b");
+    var uMean = mean(items, "u");
+    var key = classify(bMean, uMean);
+    var o = OUTCOMES[key];
+
+    document.getElementById("resultName").textContent = o.headline;
+    document.getElementById("resultTerm").textContent = o.attribution;
+    document.getElementById("resultGloss").textContent = o.gloss;
+    document.getElementById("readB").textContent = fmt(bMean);
+    document.getElementById("readU").textContent = fmt(uMean);
+
+    fillList("tipBup", topN(items, "b", 1, 3));
+    fillList("tipBdown", topN(items, "b", -1, 3));
+    fillList("tipUup", topN(items, "u", 1, 3));
+    fillList("tipUdown", topN(items, "u", -1, 3));
+
+    buildLegend(key);
+    drawPlot(bMean, uMean, key);
+    document.querySelectorAll(".cake-illus").forEach(function(el){ el.toggleAttribute("hidden", el.dataset.cake !== key); });
+
+    results.hidden = false;
+    results.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+
+  function resetAll(){
+    selected.clear();
+    document.querySelectorAll(".ing").forEach(function(btn){
+      btn.setAttribute("aria-pressed", "false");
+    });
+    document.querySelectorAll(".ing-ghost").forEach(function(g){ g.remove(); });
+    updateBowl();
+    results.hidden = true;
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+
+  buildSections();
+  updateBowl();
+  bakeBtn.addEventListener("click", bake);
+  document.getElementById("resetBtn").addEventListener("click", resetAll);
+})();
+</script>
+</body>
+</html>
