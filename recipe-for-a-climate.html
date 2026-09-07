@@ -31,7 +31,6 @@
     --zone-assimilation: rgba(149,102,27,0.16);
     --zone-differentiation: rgba(122,32,53,0.14);
     --zone-exclusion: rgba(94,89,76,0.14);
-    --zone-uncommitted: rgba(92,78,115,0.30);
     --shadow: 0 1px 2px rgba(36,31,27,0.06), 0 6px 20px -8px rgba(36,31,27,0.18);
     --focus: #2B6E8C;
     color-scheme: light;
@@ -60,7 +59,6 @@
       --zone-assimilation: rgba(228,174,82,0.16);
       --zone-differentiation: rgba(222,129,149,0.16);
       --zone-exclusion: rgba(183,174,153,0.14);
-      --zone-uncommitted: rgba(182,162,214,0.28);
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 26px -10px rgba(0,0,0,0.55);
       color-scheme: dark;
     }
@@ -88,7 +86,6 @@
     --zone-assimilation: rgba(228,174,82,0.16);
     --zone-differentiation: rgba(222,129,149,0.16);
     --zone-exclusion: rgba(183,174,153,0.14);
-    --zone-uncommitted: rgba(182,162,214,0.28);
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 26px -10px rgba(0,0,0,0.55);
     color-scheme: dark;
   }
@@ -295,11 +292,6 @@
   }
   .reset-btn:active{ transform:scale(.97); }
 
-  footer{
-    max-width:720px; margin:2.4rem auto 0; padding:1rem 1rem 0;
-    font-size:.72rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:1rem;
-  }
-
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
   }
@@ -320,7 +312,7 @@
       <line x1="1" y1="12" x2="39" y2="12" stroke="var(--ink-faint)" stroke-width="1.6" stroke-linecap="round"/>
     </svg>
     <div class="bowl-count">
-      <div class="n"><span id="bowlN">0</span> of 34 in the bowl</div>
+      <div class="n"><span id="bowlN">0</span> of <span id="bowlTotal">34</span> in the bowl</div>
       <div class="label" id="bowlHint">drag ingredients up here</div>
     </div>
     <button class="bake-btn" id="bakeBtn" disabled>Bake it</button>
@@ -331,7 +323,7 @@
   <div class="intro">
     <span class="kicker">Every ingredient below is real</span>
     <h1>Recipe for a Climate</h1>
-    <p>These are real HR practices, reported by real foreign employees and HR staff at French multinationals, for this thesis. Drag the ones you'd put in the bowl for a locally-hired foreign employee up to the bowl above (or just tap them), then hit <strong>Bake it</strong> to see which inclusion climate your mix makes.</p>
+    <p>Tap on the ingredient you'd like to add.</p>
   </div>
 
   <div id="sections"></div>
@@ -382,13 +374,6 @@
         </g>
         <path d="M150 138 L168 133 L172 145 L152 149 Z" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
       </svg>
-      <svg class="cake-illus" data-cake="uncommitted" hidden viewBox="0 0 220 170" role="img" aria-label="A flat cake that never rose, sunken in the middle">
-        <ellipse cx="110" cy="150" rx="82" ry="11" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
-        <path d="M40 118 Q75 104 110 122 Q145 104 180 118 L180 140 Q180 146 173 146 L47 146 Q40 146 40 140 Z" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M50 116 Q80 106 110 120 Q140 106 170 116" fill="none" stroke="var(--plum)" stroke-width="3" stroke-linecap="round"/>
-        <path d="M90 95 Q94 86 90 79 Q86 72 90 63" stroke="var(--ink-faint)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
-        <path d="M130 95 Q134 86 130 79 Q126 72 130 63" stroke="var(--ink-faint)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
-      </svg>
     </div>
 
     <div class="plot-wrap">
@@ -422,15 +407,11 @@
       </div>
     </div>
 
-    <p class="note">Every ingredient has two hidden scores: how much it builds belonging, and how much it values what makes someone different. Your cake is the <em>average</em> of everything in the bowl, not the total — a climate is about the whole mix, not how many ingredients you piled in. This page names what came out of the oven. It's not grading you as a baker.</p>
-
     <div class="reset-row">
       <button class="reset-btn" id="resetBtn">Bake another cake</button>
     </div>
   </section>
 </div>
-
-<footer>Every ingredient above is drawn from fifteen interviews conducted for this research: ten locally hired foreign employees and five HR professionals at French multinationals. Framework: Shore, L. M., Randel, A. E., Chung, B. G., Dean, M. A., Ehrhart, K. H., &amp; Singh, G. (2011). Inclusion and diversity in work groups: A review and model for future research. <em>Journal of Management, 37</em>(4), 1262&ndash;1289.</footer>
 
 <script>
 (function(){
@@ -447,8 +428,10 @@
       {n:"Relocation help exists — but only for internal transfers, not you", cite:"EMP02", b:-2, u:-1},
       {n:"A buddy who knows the company and speaks your language", cite:"EMP08", b:2, u:1},
       {n:"Your buddy is just as new and lost as you are", cite:"EMP01", b:-1, u:-1},
-      {n:"French classes for permanent staff only — you pay your own tutor", cite:"EMP03", b:-1, u:-1},
-      {n:"HR tells you that you'll “never really be French”", cite:"EMP02", b:-3, u:-2}
+      {n:"French classes are not available for your type of contract", cite:"EMP03", b:-1, u:-1},
+      {n:"HR tells you that you'll “never really be French”", cite:"EMP02", b:-3, u:-2},
+      {n:"A named coordinator you can actually go to with questions", cite:'HR1 — "I would love to have that job. We need someone."', b:2, u:1},
+      {n:"Day one is structured, with a program and clear expectations", cite:'EMP03 — "on day one, it should be at least structured... you should at least know what’s expected from you."', b:2, u:1}
     ]},
     { section:"Everyday interactions", items:[
       {n:"The team speaks French, switches to English for a sentence, then drifts back", cite:"EMP03, EMP07", b:-1, u:1},
@@ -456,23 +439,25 @@
       {n:"You're made to present in French, right after being denied lessons", cite:"EMP02", b:-2, u:-2},
       {n:"A colleague translates for you, off her own back, not company policy", cite:"EMP02", b:1, u:1},
       {n:"Colleagues laugh and talk around you in French. You understand nothing", cite:"EMP07", b:-3, u:0},
-      {n:"Someone just says “bonjour” and looks you in the eye", cite:"EMP08", b:2, u:0},
+      {n:"People know you in the open space and acknowledge your presence", cite:"EMP08", b:2, u:0},
       {n:"Open debate is just how the team talks, and someone tells you that upfront", cite:"EMP09", b:1, u:2},
       {n:"Same debate culture, but nobody explains it — every disagreement feels risky", cite:"EMP02", b:-2, u:1},
-      {n:"Skipping the daily team lunch gets written into your review", cite:"EMP10", b:-2, u:-2}
+      {n:"Skipping the daily team lunch gets written into your review", cite:"EMP10", b:-2, u:-2},
+      {n:"The whole team gets trained, not just the manager", cite:'EMP05 — "the work has to be done on the other side of the team, not the foreigners, but the French people in the company."', b:2, u:1},
+      {n:"A welcome coffee organized for international hires", cite:'EMP06 — "just having a welcome coffee with international people could have been like a good experience."', b:2, u:1}
     ]},
     { section:"Performance management", items:[
-      {n:"Same evaluation rubric for absolutely everyone, no exceptions", cite:"HR1", b:-1, u:-2},
       {n:"Your manager asks how you're adjusting to a new language and life, as part of the review", cite:"EMP09", b:2, u:1},
       {n:"“I know you're not French, so I wouldn't consider that you'd think this way”", cite:"EMP10", b:-2, u:-2},
       {n:"Cut off from the French banter, so you're read as “not strong enough” — your emails now get checked before you send them", cite:"EMP07", b:-2, u:-2},
-      {n:"Denied the system access your role needs, then blamed for the missed work", cite:"EMP08", b:-2, u:-1},
-      {n:"Clients give you more flexibility than your own internal review does", cite:"HR2", b:1, u:1},
+      {n:"A colleague tells you in the review that they love your ideas, and to speak up even more", cite:"EMP09", b:1, u:2},
       {n:"Your manager expects you to adapt “as quick as a French” employee", cite:"HR3", b:-1, u:-2},
-      {n:"Your background never comes up in the review — and that feels like fairness to you", cite:"EMP01", b:1, u:-1}
+      {n:"Your background never comes up in the review — and that feels like fairness to you", cite:"EMP01", b:1, u:-1},
+      {n:"Managers get assessed on whether they're ready to take on an international hire", cite:'EMP10 — "there is also an evaluation of the manager. If the manager needs some training before accepting a foreign individual."', b:2, u:1},
+      {n:"Managing multicultural teams becomes part of real manager training, not just an LMS module", cite:'EMP08 — "people should learn to be managers and get training specially for managing multicultural teams."', b:2, u:2}
     ]},
     { section:"What the employee brings", items:[
-      {n:"You keep your accent on purpose — you want people to know you're different", cite:"EMP05", b:-1, u:2},
+      {n:"You feel comfortable keeping your accent and not adjusting it", cite:"EMP05", b:-1, u:2},
       {n:"You learn to mask your background to move up", cite:"EMP06", b:2, u:-2},
       {n:"You switch personality depending on the room — learn it, unlearn it, repeat", cite:"EMP01", b:1, u:-1},
       {n:"You treat fitting in as your own homework, nobody else's job", cite:"EMP03", b:1, u:-1},
@@ -487,17 +472,17 @@
     inclusion:{ term:"Inclusion", attribution:"Shore et al. (2011) call this Inclusion.", headline:"Congrats — you’ve baked an Inclusion cake!", gloss:"Their term for high belonging and high uniqueness valued, together. In the interviews, this combination was rare — and even then, it usually held together because of one supportive manager, not a company policy.", color:"var(--olive)", soft:"var(--olive-soft)", zone:"var(--zone-inclusion)" },
     assimilation:{ term:"Assimilation", attribution:"Shore et al. (2011) call this Assimilation.", headline:"You’ve baked an Assimilation cake.", gloss:"High belonging, low uniqueness valued: you're in, as long as you set your differences aside. This was the most common outcome across the interviews for this thesis.", color:"var(--mustard)", soft:"var(--mustard-soft)", zone:"var(--zone-assimilation)" },
     differentiation:{ term:"Differentiation", attribution:"Shore et al. (2011) call this Differentiation.", headline:"You’ve baked a Differentiation cake.", gloss:"High uniqueness valued, low belonging: your difference gets noticed and even named out loud, but you're still not quite one of the team.", color:"var(--bordeaux)", soft:"var(--bordeaux-soft)", zone:"var(--zone-differentiation)" },
-    exclusion:{ term:"Exclusion", attribution:"Shore et al. (2011) call this Exclusion.", headline:"Oh no — you’ve baked an Exclusion cake.", gloss:"Low on both. Neither your fit with the team nor what makes you different is being recognised.", color:"var(--zinc)", soft:"var(--zinc-soft)", zone:"var(--zone-exclusion)" },
-    uncommitted:{ term:"Uncommitted mix", attribution:"Not one of Shore et al.'s four — this page's own fifth outcome.", headline:"This one didn’t rise — an Uncommitted mix.", gloss:"The ingredients pulled in different enough directions that no clear climate came out. That's a real result too, not a mistake.", color:"var(--plum)", soft:"var(--plum-soft)", zone:"var(--zone-uncommitted)" }
+    exclusion:{ term:"Exclusion", attribution:"Shore et al. (2011) call this Exclusion.", headline:"Oh no — you’ve baked an Exclusion cake.", gloss:"Low on both. Neither your fit with the team nor what makes you different is being recognised.", color:"var(--zinc)", soft:"var(--zinc-soft)", zone:"var(--zone-exclusion)" }
   };
 
-  var THRESH = 0.4;
   var selected = new Set(); // holds item.n as unique key (names are unique)
   var allItems = [];
   DATA.forEach(function(sec){ sec.items.forEach(function(it){ allItems.push(it); }); });
+  var TOTAL = allItems.length;
 
   var sectionsEl = document.getElementById("sections");
   var bowlN = document.getElementById("bowlN");
+  var bowlTotal = document.getElementById("bowlTotal");
   var bowlHint = document.getElementById("bowlHint");
   var bakeBtn = document.getElementById("bakeBtn");
   var results = document.getElementById("results");
@@ -650,9 +635,10 @@
   function updateBowl(){
     var n = selected.size;
     bowlN.textContent = n;
+    bowlTotal.textContent = TOTAL;
     bakeBtn.disabled = n === 0;
-    bowlHint.textContent = n === 0 ? "drag ingredients up here" : (n === 1 ? "ready whenever you are" : "drag more in, or hit Bake it");
-    var pct = Math.min(1, n / 34);
+    bowlHint.textContent = n === 0 ? "tap ingredients below" : (n === 1 ? "ready whenever you are" : "tap Bake it when ready");
+    var pct = Math.min(1, n / TOTAL);
     fillRect.setAttribute("y", 30 - pct * 18);
     fillRect.setAttribute("height", pct * 18);
     if(!results.hidden && n === 0){ results.hidden = true; }
@@ -666,7 +652,6 @@
   }
 
   function classify(bMean, uMean){
-    if(Math.abs(bMean) <= THRESH && Math.abs(uMean) <= THRESH) return "uncommitted";
     var posB = bMean >= 0, posU = uMean >= 0;
     if(posB && posU) return "inclusion";
     if(posB && !posU) return "assimilation";
@@ -702,7 +687,7 @@
   }
 
   function buildLegend(activeKey){
-    var order = ["inclusion", "assimilation", "differentiation", "exclusion", "uncommitted"];
+    var order = ["inclusion", "assimilation", "differentiation", "exclusion"];
     var legend = document.getElementById("legend");
     legend.innerHTML = "";
     order.forEach(function(key){
@@ -739,10 +724,6 @@
     g.push(rect(mid, mid, S-pad, S-pad, "differentiation"));
     g.push(rect(pad, mid, mid, S-pad, "exclusion"));
 
-    // uncommitted core square
-    var coreHalf = (THRESH/scale) * half;
-    g.push('<rect x="'+(mid-coreHalf)+'" y="'+(mid-coreHalf)+'" width="'+(coreHalf*2)+'" height="'+(coreHalf*2)+'" rx="6" fill="'+css("--zone-uncommitted")+'"></rect>');
-
     // axes
     g.push('<line x1="'+pad+'" y1="'+mid+'" x2="'+(S-pad)+'" y2="'+mid+'" stroke="'+css("--line")+'" stroke-width="1.4"/>');
     g.push('<line x1="'+mid+'" y1="'+pad+'" x2="'+mid+'" y2="'+(S-pad)+'" stroke="'+css("--line")+'" stroke-width="1.4"/>');
@@ -769,7 +750,7 @@
   }
 
   function colorVarFor(key){
-    return { inclusion:"--olive", assimilation:"--mustard", differentiation:"--bordeaux", exclusion:"--zinc", uncommitted:"--plum" }[key];
+    return { inclusion:"--olive", assimilation:"--mustard", differentiation:"--bordeaux", exclusion:"--zinc" }[key];
   }
 
   function bake(){
