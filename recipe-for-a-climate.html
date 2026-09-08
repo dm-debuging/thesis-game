@@ -711,21 +711,21 @@
 
     function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
-    // Coordinate mapping: x = uniqueness (right = positive), y = belonging (up = positive, so invert SVG y)
-    function X(u){ return mid + (u/scale)*half; }
-    function Y(b){ return mid - (b/scale)*half; }
+    // Matches Shore et al.'s own published layout: belongingness is the column axis
+    // (low left, high right); value in uniqueness is the row axis (low top, high bottom).
+    function X(b){ return mid + (b/scale)*half; }
+    function Y(u){ return mid + (u/scale)*half; }
 
     function rect(x1,y1,x2,y2,key){
       return '<rect x="'+x1+'" y="'+y1+'" width="'+(x2-x1)+'" height="'+(y2-y1)+'" fill="'+ css("--zone-"+key) +'"></rect>';
     }
 
-    // top half = belonging positive; right half = uniqueness positive.
-    // top-right(u>0,b>0)=inclusion; top-left(u<0,b>0)=assimilation; bottom-right(u>0,b<0)=differentiation; bottom-left(u<0,b<0)=exclusion
+    // top-left(b<0,u<0)=exclusion; top-right(b>0,u<0)=assimilation; bottom-left(b<0,u>0)=differentiation; bottom-right(b>0,u>0)=inclusion
     var g = [];
-    g.push(rect(mid, pad, S-pad, mid, "inclusion"));
-    g.push(rect(pad, pad, mid, mid, "assimilation"));
-    g.push(rect(mid, mid, S-pad, S-pad, "differentiation"));
-    g.push(rect(pad, mid, mid, S-pad, "exclusion"));
+    g.push(rect(pad, pad, mid, mid, "exclusion"));
+    g.push(rect(mid, pad, S-pad, mid, "assimilation"));
+    g.push(rect(pad, mid, mid, S-pad, "differentiation"));
+    g.push(rect(mid, mid, S-pad, S-pad, "inclusion"));
 
     // axes
     g.push('<line x1="'+pad+'" y1="'+mid+'" x2="'+(S-pad)+'" y2="'+mid+'" stroke="'+css("--line")+'" stroke-width="1.4"/>');
@@ -735,17 +735,17 @@
     g.push('<rect x="'+pad+'" y="'+pad+'" width="'+(S-2*pad)+'" height="'+(S-2*pad)+'" fill="none" stroke="'+css("--line")+'" stroke-width="1.4"/>');
 
     // axis labels
-    g.push(text(mid, 13, "value in uniqueness →", "middle", css("--ink-faint")));
-    g.push(text(mid, S-6, "← suppressed      valued →", "middle", css("--ink-faint")));
-    g.push('<text x="10" y="'+mid+'" transform="rotate(-90 10 '+mid+')" text-anchor="middle" font-size="8.5" fill="'+css("--ink-faint")+'" font-family="IBM Plex Mono, monospace">belongingness</text>');
+    g.push(text(mid, 13, "belongingness →", "middle", css("--ink-faint")));
+    g.push(text(mid, S-6, "← withheld      offered →", "middle", css("--ink-faint")));
+    g.push('<text x="10" y="'+mid+'" transform="rotate(-90 10 '+mid+')" text-anchor="middle" font-size="8.5" fill="'+css("--ink-faint")+'" font-family="IBM Plex Mono, monospace">value in uniqueness</text>');
 
     function text(x,y,str,anchor,fill,size){
       return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anchor||"middle")+'" font-size="'+(size||8.5)+'" fill="'+fill+'" font-family="IBM Plex Mono, monospace">'+str+'</text>';
     }
 
     // dot
-    var px = X(Math.max(-scale, Math.min(scale, uMean)));
-    var py = Y(Math.max(-scale, Math.min(scale, bMean)));
+    var px = X(Math.max(-scale, Math.min(scale, bMean)));
+    var py = Y(Math.max(-scale, Math.min(scale, uMean)));
     var dotColor = css(colorVarFor(activeKey));
     g.push('<circle cx="'+px+'" cy="'+py+'" r="9" fill="'+dotColor+'" stroke="'+css("--surface")+'" stroke-width="3"/>');
 
