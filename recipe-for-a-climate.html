@@ -323,7 +323,7 @@
   <div class="intro">
     <span class="kicker">Every ingredient below is real</span>
     <h1>Recipe for a Climate</h1>
-    <p>Click on the ingredients you'd like to add to bake the perfect inclusion cake.</p>
+    <p>Click on the ingredients you'd like to add to bake the perfect inclusion cake — at least one from each section. Every ingredient is pulled from real interviews conducted for this thesis.</p>
   </div>
 
   <div id="sections"></div>
@@ -632,12 +632,25 @@
     setTimeout(function(){ bowlIconEl.classList.remove("pulse"); }, 220);
   }
 
+  function missingSections(){
+    return DATA.filter(function(sec){
+      return !sec.items.some(function(it){ return selected.has(it); });
+    }).map(function(sec){ return sec.section; });
+  }
+
   function updateBowl(){
     var n = selected.size;
     bowlN.textContent = n;
     bowlTotal.textContent = TOTAL;
-    bakeBtn.disabled = n === 0;
-    bowlHint.textContent = n === 0 ? "tap ingredients below" : (n === 1 ? "ready whenever you are" : "tap Bake it when ready");
+    var missing = missingSections();
+    bakeBtn.disabled = missing.length > 0;
+    if(n === 0){
+      bowlHint.textContent = "tap at least one ingredient per section";
+    } else if(missing.length > 0){
+      bowlHint.textContent = "still need one from: " + missing.join(", ");
+    } else {
+      bowlHint.textContent = "tap Bake it when ready";
+    }
     var pct = Math.min(1, n / TOTAL);
     fillRect.setAttribute("y", 30 - pct * 18);
     fillRect.setAttribute("height", pct * 18);
